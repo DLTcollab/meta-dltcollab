@@ -9,10 +9,16 @@ Dependencies
 Table of Contents
 =================
 
-  I. Adding the meta-tangleid layer to your build
+  1. Adding the meta-tangleid layer to your build
+  2. Config
 
 
-I. Adding the meta-tangleid layer to your build
+1. Adding the meta-tangleid layer to your build
 =================================================
 
 Run 'bitbake-layers add-layer meta-tangleid'
+
+2. Config
+=========
+
+- `TANGLEID_UUID` : set UUID
