@@ -89,15 +89,19 @@ function UUID {
     echo $trytes
 }
 
-function POST {
+function backend {
     # get backend
     if [ -e /etc/tangleid/backend ]; then
-        TangleID_backend=$(cat /etc/tangleid/backend)
+        echo $(cat /etc/tangleid/backend)
     else
         # default value
         # echo "use default backend" >& 2
-        TangleID_backend="http://node2.puyuma.org:8000"
+        echo "http://node2.puyuma.org:8000"
     fi
+}
+
+function POST {
+    TangleID_backend=$(backend)
 
     RES=$(curl -s $TangleID_backend \
         -X POST \
@@ -121,6 +125,7 @@ function help {
     echo "Commands : "
     echo ""
     echo "UUID : get UUID"
+    echo "backend : get backend url"
     echo "new_claim : send claim"
     echo "  Args:"
     echo "    message : claim message"
@@ -129,6 +134,9 @@ function help {
 case $1 in
     "UUID")
         output=$(UUID)
+        ;;
+    "backend")
+        output=$(backend)
         ;;
     "ToTryte")
         output=$(byteToTryte $2)
