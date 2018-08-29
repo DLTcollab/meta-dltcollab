@@ -1,0 +1,2 @@
+
+echo "UUID=$(tangleid UUID)"

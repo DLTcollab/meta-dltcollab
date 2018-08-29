@@ -1,0 +1,6 @@
+#!bin/sh
+
+set -ue
+
+echo "UUID=$(tangleid UUID)"
+echo "backend=$(tangleid backend)"
