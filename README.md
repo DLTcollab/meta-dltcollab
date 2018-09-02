@@ -1,24 +1,15 @@
-This README file contains information on the contents of the meta-tangleid layer.
+# meta-dltcollab
 
-Please see the corresponding sections below for details.
+There has some yocto meta-layer.
 
-Dependencies
-============
+- `meta-tangleid`
 
+Install command line `tangleid` for using TangleID 
 
-Table of Contents
-=================
+- `meta-tangleid-with-mender`
 
-  1. Adding the meta-tangleid layer to your build
-  2. Config
+Integretion `tangleid` and `mender` for managing IoT device
 
+---
 
-1. Adding the meta-tangleid layer to your build
-=================================================
-
-Run 'bitbake-layers add-layer meta-tangleid'
-
-2. Config
-=========
-
-- `TANGLEID_UUID` : set UUID
+More details (e.g. recipes info) on `README.md` for each meta-layer.
