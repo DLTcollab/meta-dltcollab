@@ -3,7 +3,11 @@ DESCRIPTION = "Hardware-accelerated implementation for IOTA PearlDiver, which ut
 S = "${WORKDIR}/git"
 B = "${WORKDIR}/build"
 
-SRC_URI = "git://github.com/DLTcollab/dcurl;protocol=https;branch=dev"
+FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
+
+SRC_URI = "git://github.com/DLTcollab/dcurl;protocol=https;branch=dev \
+           file://cpu-features.mk.patch;apply=yes \
+"
 
 # commit Merge pull request #79 from marktwtn/hash-rate-distribution
 SRCREV = "09f441641e40e9a330e2f0f680ec838819a92309"
@@ -18,21 +22,31 @@ RDEPENDS_${PN} = ""
 inherit cmake
 
 CLEANBROKEN = "1"
-OECMAKE_GENERATOR = "Unix Makefiles"
+#OECMAKE_GENERATOR = "Unix Makefiles"
 
 do_configure() {
-    bbwarn "hi i am configure"
 }
 
 do_compile() {
-    bbwarn " hi i am compile!"
     cd ${S}
     # like using make
-    oe_runmake
+    oe_runmake OUT=${B}
 }
 
+INSANE_SKIP_${PN} = "ldflags"
+INSANE_SKIP_${PN}-dev = "ldflags"
+
 do_install() {
-    bbwarn " hi i am install "
+    cp -a --no-preserve=ownership ${B}/libdcurl.so ${B}/libdcurl.so.1.0
     install -d ${D}${libdir}
-    install -m 0755 ${B}/libdcurl.so ${D}${bindir}
+    install -m 0755 ${B}/libdcurl.so.1.0  ${D}${libdir}
+    ln -sf libdcurl.so.1.0 ${D}${libdir}/libdcurl.so.1
+    ln -sf libdcurl.so.1 ${D}${libdir}/libdcurl.so
+    install -d ${D}${bindir}
+    install -m 0755 ${B}/test-* ${D}${bindir}
+
+    FIND_PACKAGES="${IMAGE_INSTALL} ${PACKAGE_INSTALL} ${CORE_IMAGE_EXTRA_INSTALL}"
+    if [ "${FIND_PACKAGES}/python//" != "python" ]; then
+    rm ${D}${bindir}/test-multi-pow
+    fi
 }
