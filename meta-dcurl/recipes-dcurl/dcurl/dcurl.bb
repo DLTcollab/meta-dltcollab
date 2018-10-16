@@ -37,13 +37,24 @@ INSANE_SKIP_${PN} = "ldflags"
 INSANE_SKIP_${PN}-dev = "ldflags"
 
 do_install() {
+    # install shared library
     cp -a --no-preserve=ownership ${B}/libdcurl.so ${B}/libdcurl.so.1.0
     install -d ${D}${libdir}
     install -m 0755 ${B}/libdcurl.so.1.0  ${D}${libdir}
     ln -sf libdcurl.so.1.0 ${D}${libdir}/libdcurl.so.1
     ln -sf libdcurl.so.1 ${D}${libdir}/libdcurl.so
+
+    # install testing binary file
     install -d ${D}${bindir}
-    install -m 0755 ${B}/test-* ${D}${bindir}
+    ALL_TEST=$(ls | grep "test-[^.]*" -io | uniq)
+    install -m 0755 ${ALL_TEST} ${D}${bindir}
+
+    # install include header file
+    install -d ${D}${includedir}/dcurl
+    cd ${S}/src
+    ALL_INCLUDE=$(ls | grep ".h" | uniq)
+    install -m 0755 ${ALL_INCLUDE} ${D}${includedir}/dcurl
+    cd ${B}
 
     FIND_PACKAGES="${IMAGE_INSTALL} ${PACKAGE_INSTALL} ${CORE_IMAGE_EXTRA_INSTALL}"
     if [ "${FIND_PACKAGES}/python//" != "python" ]; then
