@@ -7,6 +7,7 @@ FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
 
 SRC_URI = "git://github.com/DLTcollab/dcurl;protocol=https;branch=dev \
            file://cpu-features.mk.patch;apply=yes \
+           file://Makefile.patch;apply=yes \
 "
 
 # commit Merge pull request #79 from marktwtn/hash-rate-distribution
@@ -24,13 +25,29 @@ inherit cmake
 CLEANBROKEN = "1"
 #OECMAKE_GENERATOR = "Unix Makefiles"
 
+# all build options
+DCURL_BUILD_AVX ?= "0"
+DCURL_BUILD_SSE ?= "0"
+DCURL_BUILD_GPU ?= "0"
+DCURL_BUILD_FPGA_ACCEL ?= "0"
+DCURL_BUILD_JNI ?= "0"
+DCURL_BUILD_STAT ?= "0"
+DCURL_BUILD_COMPAT ?= "0"
+
 do_configure() {
 }
 
 do_compile() {
     cd ${S}
     # like using make
-    oe_runmake OUT=${B}
+    oe_runmake OUT=${B} \
+    BUILD_AVX=${DCURL_BUILD_AVX} \
+    BUILD_SSE=${DCURL_BUILD_SSE} \
+    BUILD_GPU=${DCURL_BUILD_GPU} \
+    BUILD_FPGA_ACCEL=${DCURL_BUILD_FPGA_ACCEL} \
+    BUILD_JNI=${DCURL_BUILD_JNI} \
+    BUILD_STAT=${DCURL_BUILD_STAT} \
+    BUILD_COMPAT=${DCURL_BUILD_COMPAT}
 }
 
 INSANE_SKIP_${PN} = "ldflags"
